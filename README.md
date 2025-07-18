@@ -28,7 +28,7 @@ python main.py
 
 5. Send commands to your bot in Telegram:
 
-Command     - Description
+Command     - Description  
 /screenshot - Takes a screenshot of your PC  
 /lock       - Locks the screen (Win + L)  
 /shutdown   - Shuts down your computer  
