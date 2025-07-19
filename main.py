@@ -1,9 +1,11 @@
-import telebot, ctypes, pyautogui, os, time, dotenv
+import telebot, ctypes, pyautogui, os, time, dotenv, subprocess 
+from telebot import types
 
+    
 dotenv.load_dotenv()
 
-TOKEN = os.getenv('TOKEN')
-MY_TELEGRAM = os.getenv('MY_TELEGRAM')
+TOKEN = str(os.getenv('TOKEN'))
+MY_TELEGRAM = int(os.getenv('MY_TELEGRAM'))
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -13,6 +15,33 @@ def lock_screen():
 def shutdown_pc():
     os.system("shutdown /s /t 1")
 
+def get_uptime():
+    cmd = 'powershell -command "(get-date) - (gcim Win32_OperatingSystem).LastBootUpTime"'
+    result = subprocess.check_output(cmd, shell=True, text=True)
+    
+    total_hours = None
+    total_minutes = None
+
+    for line in result.splitlines():
+        if "TotalHours" in line:
+            total_hours = line.split(":")[1].strip().replace(',', '.')
+        elif "TotalMinutes" in line:
+            total_minutes = line.split(":")[1].strip().replace(',', '.')
+
+    if total_hours:
+        return f"{total_hours} hours"
+    elif total_minutes:
+        return f"{total_minutes} minutes"
+    else:
+        return "Uptime not available"
+
+@bot.message_handler(commands=['uptime'])
+def uptime_command(message):
+    if message.chat.id != MY_TELEGRAM:
+        return
+    uptime = get_uptime()
+    bot.send_message(message.chat.id, f"PC uptime: {uptime.split(' ')[0].split('.')[0]} hours")
+    
 @bot.message_handler(commands=['start'])
 def start(message):
     if message.chat.id != MY_TELEGRAM:
@@ -45,11 +74,11 @@ def shutdown_command(message):
     bot.send_message(message.chat.id, "PC was shutdowned")
     shutdown_pc()
 
-from telebot import types
 commands = [
     types.BotCommand("/screenshot", "Screenshot"),
     types.BotCommand("/lock", "Win+L"),
     types.BotCommand("/shutdown", "Shutdown"),
+    types.BotCommand("/uptime", "Working time"),
 ]
 
 bot.set_my_commands(commands)
