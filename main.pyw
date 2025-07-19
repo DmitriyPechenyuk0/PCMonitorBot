@@ -9,12 +9,6 @@ MY_TELEGRAM = int(os.getenv('MY_TELEGRAM'))
 
 bot = telebot.TeleBot(TOKEN)
 
-def lock_screen():
-    ctypes.windll.user32.LockWorkStation()
-
-def shutdown_pc():
-    os.system("shutdown /s /t 1")
-
 def get_uptime():
     cmd = 'powershell -command "(get-date) - (gcim Win32_OperatingSystem).LastBootUpTime"'
     result = subprocess.check_output(cmd, shell=True, text=True)
@@ -65,14 +59,14 @@ def lock_command(message):
     if message.chat.id != MY_TELEGRAM:
         return
     bot.send_message(message.chat.id, "Blocked")
-    lock_screen()
+    ctypes.windll.user32.LockWorkStation()
 
 @bot.message_handler(commands=['shutdown'])
 def shutdown_command(message):
     if message.chat.id != MY_TELEGRAM:
         return
     bot.send_message(message.chat.id, "PC was shutdowned")
-    shutdown_pc()
+    os.system("shutdown /s /t 1")
 
 commands = [
     types.BotCommand("/screenshot", "Screenshot"),
