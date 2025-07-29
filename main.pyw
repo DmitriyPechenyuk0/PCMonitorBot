@@ -33,7 +33,7 @@ def get_uptime():
 
 
 @bot.message_handler(commands=['uptime'])
-def uptime_command(message):
+def uptime_command(message: types.Message):
     if message.chat.id != MY_TELEGRAM:
         return
     uptime = get_uptime()
@@ -41,13 +41,13 @@ def uptime_command(message):
 
 
 @bot.message_handler(commands=['start'])
-def start(message):
+def start(message: types.Message):
     if message.chat.id != MY_TELEGRAM:
         return
 
 
 @bot.message_handler(commands=['screenshot'])
-def send_screenshot(message):
+def send_screenshot(message: types.Message):
     if message.chat.id != MY_TELEGRAM:
         return
     screenshot = pyautogui.screenshot()
@@ -62,7 +62,7 @@ def send_screenshot(message):
 
 
 @bot.message_handler(commands=['lock'])
-def lock_command(message):
+def lock_command(message: types.Message):
     if message.chat.id != MY_TELEGRAM:
         return
     bot.send_message(message.chat.id, "Blocked")
@@ -70,7 +70,7 @@ def lock_command(message):
 
 
 @bot.message_handler(commands=['shutdown'])
-def shutdown_command(message):
+def shutdown_command(message: types.Message):
     if message.chat.id != MY_TELEGRAM:
         return
     bot.send_message(message.chat.id, "PC was shutdowned")
@@ -78,7 +78,7 @@ def shutdown_command(message):
 
 
 @bot.message_handler(commands=['reboot'])
-def shutdown_command(message):
+def shutdown_command(message: types.Message):
     if message.chat.id != MY_TELEGRAM:
         return
     bot.send_message(message.chat.id, "PC reboots")
@@ -86,7 +86,7 @@ def shutdown_command(message):
 
 
 @bot.message_handler(commands=['alttab'])
-def alttab_command(message):
+def alttab_command(message: types.Message):
     if message.chat.id != MY_TELEGRAM:
         return
     
@@ -106,7 +106,7 @@ def alttab_command(message):
 
 
 @bot.message_handler(func=lambda message: message.text == 'To previous tab')
-def to_previous_tab(message):
+def to_previous_tab(message: types.Message):
     pyautogui.keyDown('shift')
     pyautogui.keyDown('tab')
     pyautogui.keyUp('shift')
@@ -123,7 +123,7 @@ def to_previous_tab(message):
     
 
 @bot.message_handler(func=lambda message: message.text == 'To next tab')
-def to_previous_tab(message):
+def to_previous_tab(message: types.Message):
     pyautogui.keyDown('tab')
     pyautogui.keyUp('tab')
     screenshot = pyautogui.screenshot()
@@ -138,7 +138,7 @@ def to_previous_tab(message):
 
 
 @bot.message_handler(func=lambda message: message.text == 'Enter')
-def to_previous_tab(message):
+def to_previous_tab(message: types.Message):
     pyautogui.keyDown('enter')
     pyautogui.keyUp('enter')
 
